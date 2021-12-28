@@ -1,0 +1,45 @@
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-xl-12">
+            <h6>Lista de productos</h6>
+        </div>
+        <div class="col-xl-12" *ngIf="categories && productList">
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="cat">
+                        <div class="md-form">
+                            <select class="form-control" [(ngModel)]="categorie" #t (ngModelChange)="productByCategory(t.value)">
+                              <option value="" disabled>Categoria</option>
+                              <option  [ngValue]="cat" *ngFor=" let cat of categories.categoryList">{{cat}}</option>
+                            </select>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row prod px-0">
+                <div class="col-xl-12">
+                    <div class="products">
+                        <div  *ngFor="let c of categories.categoryList">
+                            <div class="row mt-2" *ngIf="productByCategory(c)">
+                                <p class="mb-0">{{c}}</p>
+                            <div class="col-xl-1 mt-2 " *ngFor="let p of products">
+                                <div [ngClass]="{'disabled':p.stock == 0 && p.limited}" class="btn btn-prod position-relative " (click)="addSale(p, p.type)" > 
+                                    <p>{{p.name}}</p>
+                                    <p *ngIf="p.presentation !='Unico'">{{p.presentation}}</p>
+                                    <p *ngIf="p.type != 'Sabores'">{{p.price | currency:'Bs.'}}</p>
+                                    <span *ngIf="p.limited" class="badge bg-danger  position-absolute bottom-0 end-0  stock">{{p.stock}}</span>
+                                </div>
+                                
+                            </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+        <div class="row" *ngIf="type == 'add'">
+            <mdb-form-control>
+                <textarea mdbInput class="form-control" id="textAreaExample" rows="2" [(ngModel)]="note"></textarea>
+                <label mdbLabel class="form-label" for="textAreaExample">Instrucciones</label>
+              </mdb-form-control>
+        </div>
+        <div class="row" *ngIf="type =='print'">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Imp</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Producto</th>
+                        
+                        <th scope="col">Nota</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let p of detail; let i = index">
+                        <th scope="row"><input
+                            mdbCheckbox
+                            class="form-check-input"
+                            type="checkbox"
+                            id="{{'print' + i}}"
+                            value=""
+                            aria-label="..."
+                            [checked]="true"
+                            (change)="$any($event.target).checked ? addItem(p) : removeItem(p.id)"
+                          /></th>
+                        <td>{{p.cant}}</td>
+                        <td>{{p.name}} <span *ngIf="p.presentation != 'Unico'">{{p.presentation}}</span></td>
+                        <td *ngIf="p.note">{{p.note}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+       
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+      Cerrar
+    </button>
+    <button *ngIf="type=='add'" type="button" class="btn btn-primary" (click)="saveNote()">
+        Guardar
+      </button>
+      <button *ngIf="type=='print'" type="button" class="btn btn-primary" (click)="print()">
+        Imprimir
+      </button>
+  </div>
+

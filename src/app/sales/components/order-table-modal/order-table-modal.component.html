@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close({sale:false})"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+       <div class="row">
+           <div class="col-xl-12"> 
+            <div class="md-form">
+                <select class="form-control" [(ngModel)]="table">
+                  <option value="" disabled selected>Mesas disponibles</option>
+                  <option  [ngValue]="ts.id" *ngFor=" let ts of tables">Mesa {{ts.id}}</option>
+                </select>
+              </div>
+           </div>
+       </div> 
+       
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close({sale:false})">
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="saveTable()">
+        Guardar
+      </button>
+  </div>
+
+

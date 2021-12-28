@@ -1,0 +1,83 @@
+<div class="container-fluid det px-0" >
+    <div class="row px-0">
+        <div class="col-xl-12">
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text border-0" id="basic-addon3" >NIT/CI: </span>
+                        <input type="text" class="form-control rounded" id="basic" aria-describedby="basic-addon3" [(ngModel)]="doc" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text border-0" id="basic-addon3" >Cliente: </span>
+                        <input type="text" class="form-control rounded" id="basic2" aria-describedby="basic-addon3" [(ngModel)]="client" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 tb">
+                    <table class="table  table-fixed table-sm ">
+                        <thead >
+                          <tr>
+                            <th class="num" scope="col">#</th>
+                            <th class="prod" scope="col">Producto</th>
+                            <th class="cant" scope="col">Cnt.</th>
+                            <th class="price" scope="col">Precio</th>
+                            <th class="tot" scope="col">Total</th>
+                            <th  scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let d of details; let i=index" class="align-middle">
+                            <td ><i class="far fa-clipboard" (click)="openNoteModal(d,'add')"></i></td>
+                            <td>{{d.name}} <span *ngIf="d.presentation != 'Unico'">{{d.presentation}}</span></td>
+                            <td>{{d.cant}}</td>
+                            <td>{{d.price| number : '1.2-2'}}</td>
+                            <td>{{d.cost| number : '1.2-2'}}</td>
+                            <td><button mdbRipple type="button" class="btn btn-danger btn-sm btn-floating" (click)="removeItem(d, i)"><i class="fas fa-times" ></i></button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-4">
+                    <button [disabled]="details.length==0" class="btn btn-danger" mdbTooltip="Cancelar venta" (click)="cancel()"><i class="fas fa-times" ></i></button>
+                </div>
+                <div class="col-xl-8">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text border-0" id="basic-addon3">Total </span>
+                        <input disabled ngModel="{{total|currency:'Bs.'}}" type="text" class="form-control rounded" id="basic" aria-describedby="basic-addon3" />
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button [disabled]="details.length==0" class="btn btn-secondary" mdbTooltip="Notas" (click)="openNoteModal(details, 'print')"><i class="fas fa-file-signature fa-2x"></i></button>
+                </div>
+                <div class="col-4">
+                    <button [disabled]="details.length==0" class="btn btn-primary" mdbTooltip="Pedido en mesa" (click)="openTableModal()"><i class="fas fa-chair fa-2x"></i></button>
+                </div>
+                <div class="col-4">
+                    <button [disabled]="details.length==0" class="btn btn-success" mdbTooltip="Confirmar venta" (click)="confirmSale()"><i class="fas fa-clipboard-check fa-2x"></i></button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-8">
+                    <div class="md-form">
+                        <select class="form-control" [(ngModel)]="table" (ngModelChange)="pendingSale = false">
+                          <option value="" disabled selected>Mesas ocupadas</option>
+                          <option  [ngValue]="ts" *ngFor=" let ts of tables">Mesa {{ts.id}}</option>
+                        </select>
+                      </div> 
+                </div>
+                <div class="col-4">
+                    <button [disabled]="table == ''" *ngIf="!pendingSale" mdbRipple type="button" class="btn btn-primary btn-sm" (click)="loadTableDetail()">Mostrar</button>
+                    <button *ngIf="pendingSale" mdbRipple type="button" class="btn btn-primary btn-sm" (click)="saveTableDetail()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,133 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nuevo producto</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body" *ngIf="categories">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <form [formGroup]="productForm">
+            <div class="row">
+              <div class="col-xl-3">
+                <mdb-form-control>
+                  <input mdbInput type="text" id="typeText" class="form-control mb-4" formControlName="name" />
+                  <label mdbLabel class="form-label" for="typeText">Nombre</label>
+                </mdb-form-control> 
+              </div>
+              <div class="col-xl-3">
+                <div class="md-form">
+                  <select class="form-control" formControlName="category">
+                    <option value="" disabled>Categoria</option>
+                    <option value={{cat}} *ngFor=" let cat of categories.categoryList">{{cat}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xl-3">
+                <div class="md-form">
+                  <select class="form-control" formControlName="type" (change)="getType()">
+                    <option value="" disabled>Tipo</option>
+                    <option value="{{tp.key}}" *ngFor=" let tp of types | keyvalue">{{tp.key}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xl-3">
+                <div class="md-form">
+                  <select class="form-control custom-select" formControlName="presentation">
+                    <option value="" disabled>Presentacion</option>
+                    <option value="{{pr.key}}" *ngFor=" let pr of pres | keyvalue">{{pr.key}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-3">
+                <mdb-form-control >
+                  <input mdbInput  type="number" id="price" class="form-control" formControlName="price" />
+                  <label mdbLabel class="form-label" for="price">Precio Bs.</label>
+                </mdb-form-control>
+              </div>
+              <div class="col-xl-3">
+                <div class="form-check">
+                  <input mdbCheckbox class="form-check-input" type="checkbox" value="" id="limited" formControlName="limited"/>
+                  <label class="form-check-label" for="limited">Cantidad limitada</label>
+                </div>
+              </div>
+              <div class="col-xl-3">
+                <mdb-form-control >
+                  <input mdbInput  type="number" id="stock" class="form-control" formControlName="stock" />
+                  <label mdbLabel class="form-label" for="stock">Unidades</label>
+                </mdb-form-control>
+              </div>
+            </div>
+           <!-- <div class="row">
+              <div class="col-xl-12">
+                <div *ngIf=" typeArray " >
+                  <div class=" form-check form-check-inline" *ngFor="let t of presentation['controls'] ; let i = index " formArrayName="presentation" >
+                    <div  formGroupName="{{i}}" *ngIf="presentation['controls']">
+                      <input mdbCheckbox class="form-check-input" type="checkbox" id={{i}}  formControlName="enable" (change)="enablePrice($event, i, t)" />
+                      <label class="form-check-label" for={{i}}>{{t.value.type}}</label>
+                      <mdb-form-control class="w-50">
+                        <input mdbInput  type="number" id="{{'price'+i}}" class="form-control" formControlName="price" />
+                        <label mdbLabel class="form-label" for="{{'price'+i}}">Precio Bs.</label>
+                      </mdb-form-control>
+                      <input mdbCheckbox class="form-check-input" type="checkbox" id="{{'limited'+i}}"  formControlName="limited" (change)="enablePrice($event, i, t)" />
+                      <label class="form-check-label" for="{{'limited'+i}}">Limitado</label>
+                      <mdb-form-control class="w-50">
+                        <input mdbInput  type="number" id="{{'stock'+i}}" class="form-control" formControlName="stock" />
+                        <label mdbLabel class="form-label" for="{{'stock'+i}}">(unidades).</label>
+                      </mdb-form-control>
+                    </div>
+                  </div> 
+                </div>
+                <div class="row" *ngIf="!typeArray  && type.value == 'Unico'" formGroupName="presentation">
+                  <div class="col-xl-3 offset-xl-2">
+                    <mdb-form-control >
+                      <input mdbInput  type="number" id="stock" class="form-control" formControlName="price" />
+                      <label mdbLabel class="form-label" for="stock">Precio Bs.</label>
+                    </mdb-form-control>
+                  </div>
+                  <div class="col-xl-4">
+                    <div class="input-group mb-3">
+                      <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" value=""  aria-label="Checkbox for following text input" formControlName="limited" (click)="enableStock($event)" />
+                      </div>
+                      <input mdbInput type="number" class="form-control" id="unidades"  formControlName="stock" />
+                      <span class="input-group-text">Unidades.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!typeArray && type.value == 'Sabores'">
+                  <div class="col-xl-6 offset-xl-3">
+                    <div *ngFor="let f of presentation['controls']; let i = index" formArrayName="presentation">
+                      <div class="input-group mb-3" formGroupName="{{i}}">
+                        <span class="input-group-text">{{i+1}}</span>
+                        <input type="text"  class="form-control" placeholder="Sabor" formControlName="name"/>
+                        <span class="input-group-text">Bs.</span>
+                        <input type="number"  class="form-control" placeholder="Precio" formControlName="price" />
+                        <button class="btn btn-danger" type="button" id="button-addon2" mdbRipple rippleColor="danger" [disabled]="presentation['controls'].length==1" (click)="removeItem(i, presentation)">
+                          Borrar 
+                        </button>
+                      </div>
+                    </div>
+                    <button  class="d-block mx-auto btn btn-outline-success" (click)="addFlavors()">Nuevo sabor</button>
+                  </div>
+                </div>
+              </div>
+            </div>-->
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+      Cancelar
+    </button>
+    <button [disabled]="!productForm.valid" type="button" class="btn btn-primary" (click)="saveProduct()">Guardar</button>
+  </div>

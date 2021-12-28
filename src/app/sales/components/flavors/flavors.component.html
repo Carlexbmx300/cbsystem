@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{product.name}}-{{product.presentation}}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <h6>
+                    Sabores:
+                </h6>
+            </div>
+            <div class="col-xl-3 " *ngFor="let f of product.flavors">
+                <div  class="btn btn-prod mt-3"  (click)="addSale(f)"> 
+                    <p>{{f.name}}</p>
+                    <p>{{f.price | currency:'Bs.'}}</p>
+                </div>
+                
+            </div>
+        </div>
+       
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+      Cerrar
+    </button>
+  </div>

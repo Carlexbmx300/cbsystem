@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12">
+            <h6>Reporte de ventas</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group mb-2">
+                <span class="input-group-text border-0" id="basic-addon3" >Fecha: </span>
+                <input type="date" class="form-control rounded" (ngModelChange)="getSale(today = $event)" max="{{date | date:'yyyy-MM-dd'}}" [ngModel]="today| date:'yyyy-MM-dd'" id="basic" aria-describedby="basic-addon3"  />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">NIT/CI</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of sales |keyvalue">
+                    <th scope="row">{{v.key}}</th>
+                    <td>{{v.value['hour']}}</td>
+                    <td>{{v.value['client']}}</td>
+                    <td>{{v.value['doc']}}</td>
+                    <td>{{v.value['cost']|currency:'Bs.'}}</td>
+                  </tr>
+                    <tr class="table-warning">
+                        <td colspan="4"></td>
+                        <td>Total: {{total|currency:'Bs.'}}</td>
+                    </tr>  
+                </tbody>
+                
+              </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6">
+            <h4>Lista de productos</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <button class="btn btn-success float-end" (click)="openModal()">Nuevo producto</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Presentacion</th>
+                    <th scope="col">Precio Bs.</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Operaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pr of products; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{pr.name}}</td>
+                    <td><span>{{pr.presentation}}</span></td>
+                    <td>
+                      <span *ngIf="pr.type != 'Sabores'">{{pr.price | currency:'Bs.'}}</span>
+                      <span *ngIf="pr.type == 'Sabores'">Por sabor</span>
+                    </td>
+                    <td>{{pr.category}}</td>
+                    <td>
+                      <span *ngIf="pr.limited">{{pr.stock}}</span>
+                      <span *ngIf="!pr.limited">Abierto</span>
+                    </td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button *ngIf="pr.type == 'Sabores'" type="button" class="btn btn-info" (click)="openFlavorsModal(pr)">Sabores</button>
+                        <button type="button" class="btn btn-warning" (click)="openUpdateModal(pr.id)">Modificar</button>
+                        <button type="button" class="btn btn-danger">ELiminar</button>
+                      </div>
+                    </td>
+                  </tr>
+                  
+                </tbody> 
+              </table>
+        </div>
+    </div>
+</div>

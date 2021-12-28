@@ -1,0 +1,30 @@
+.det{
+    height: 100%;
+}
+.tb{
+    height: 350px;
+    border-bottom: 1px solid black;
+}
+.table{
+    font-size: 12px;
+    th{
+        padding: 0;
+    }
+    td{
+        padding: 4px 4px;
+    }
+    .num {
+        width: 20px;
+        padding: 0 !important;
+    }
+    .cant{
+        width: 25px;
+    }
+    .prod{
+        width: 160px;
+    }
+    .price, .tot{
+        width: 50px;
+    }
+   
+}

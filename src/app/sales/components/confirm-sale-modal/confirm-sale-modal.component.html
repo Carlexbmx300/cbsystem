@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Pago de venta</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close({sale:false})"
+    ></button>
+  </div>
+  <div class="modal-body">
+   <div class="container">
+       <div class="row">
+        <div class="col-12">
+            <div class="input-group mb-2">
+                <span class="input-group-text border-0" id="basic-addon3" >NIT/CI: </span>
+                <input type="text" class="form-control rounded" id="basic" aria-describedby="basic-addon3" [(ngModel)]="saleData.doc" />
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="input-group mb-2">
+                <span class="input-group-text border-0" id="basic-addon3" >Cliente: </span>
+                <input type="text" class="form-control rounded" id="basic" aria-describedby="basic-addon3" [(ngModel)]="saleData.client" />
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="input-group mb-2">
+                <span class="input-group-text border-0" id="basic-addon3" >Total: </span>
+                <input type="text" class="form-control rounded" id="basic" aria-describedby="basic-addon3" ngModel="{{saleData.cost|currency:'Bs.'}}" />
+            </div>
+        </div>
+       </div>
+   </div>
+    
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close({sale:false})">
+      Cerrar
+    </button>
+    <button  type="button" class="btn btn-primary" (click)="saveSale()">Guardar</button>
+  </div>
