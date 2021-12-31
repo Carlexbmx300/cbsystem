@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-
+import { PrintService } from "../../services/print.service";
 @Component({
   selector: 'app-note-modal',
   templateUrl: './note-modal.component.html',
@@ -12,7 +12,9 @@ index:number;
 type:string;
 note:string;
 printList=[]
-  constructor(public modalRef: MdbModalRef<NoteModalComponent>) { }
+  constructor(public modalRef: MdbModalRef<NoteModalComponent>,
+    public ps:PrintService
+    ) { }
 
   ngOnInit(): void {
     console.log(this.type)
@@ -30,6 +32,10 @@ printList=[]
   }
   print(){
     console.log(this.printList)
+    this.ps.print()
+    //let ps = new PrintService()
+    //ps.print()
+    
   }
   removeItem(id){
     this.printList = this.printList.filter(val=>val.id !== id)

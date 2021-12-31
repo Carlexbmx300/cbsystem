@@ -155,4 +155,12 @@ private tablesToday:AngularFirestoreDocument<any>
   cancelSale():Observable<boolean>{
     return this.cancel$.asObservable()
   }
+  async getNumberOfSales(){
+    let num = 0
+    let sales = await this.getTodaySales();
+    if(sales){
+      num = Object.keys(sales).length
+    }
+    return num;
+  }
 }

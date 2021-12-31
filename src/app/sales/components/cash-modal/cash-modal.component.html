@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+        <div class="row mb-2" *ngIf="cash !== undefined && cash.status =='OPENED' ">
+            <div class="col-12">
+                <div class="md-form float-end">
+                    <select [(ngModel)]="type" class="form-control form-control-sm" (ngModelChange)="close()">
+                      <option value="open" selected>Ingresos/Egresos</option>
+                      <option value="close">Cerrar caja</option>
+                    </select>
+                  </div> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" *ngIf="!open">
+                <div class="input-group mb-2">
+                    <span class="input-group-text border-0" id="basic-addon3" >EFECTIVO </span>
+                    <input type="number" class="form-control rounded" id="basic" aria-describedby="basic-addon3" [(ngModel)]="money" />
+                </div>
+            </div>
+            <div class="col-12" *ngIf="open">
+                <div class="input-group mb-2">
+                    <span class="input-group-text border-0" id="basic-addon3" >EFECTIVO </span>
+                    <input type="number" class="form-control rounded" id="basic" aria-describedby="basic-addon3" [(ngModel)]="moneyIn" />
+                </div>
+                <mdb-form-control>
+                    <textarea mdbInput class="form-control" id="textAreaExample" rows="2" [(ngModel)]="gloss"></textarea>
+                    <label mdbLabel class="form-label" for="textAreaExample">Glosa</label>
+                  </mdb-form-control>
+            </div>
+        </div>
+       
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.close()">
+      Cancelar
+    </button>
+    <button *ngIf="!open" type="button" class="btn btn-secondary" (click)="saveCash()">
+        Guardar
+      </button>
+      <button *ngIf="open" type="button" class="btn btn-success" (click)="addCash('INCOME')">
+        Ingreso
+      </button>
+      <button *ngIf="open" type="button" class="btn btn-warning" (click)="addCash('EXPENSE')">
+        Egreso
+      </button>
+  </div>
+
+

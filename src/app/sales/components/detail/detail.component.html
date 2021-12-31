@@ -54,20 +54,23 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
-                    <button [disabled]="details.length==0" class="btn btn-secondary" mdbTooltip="Notas" (click)="openNoteModal(details, 'print')"><i class="fas fa-file-signature fa-2x"></i></button>
+                <div class="col-3">
+                    <button class="btn btn-dark" mdbTooltip="Caja" (click)="openCashModal()"><i class="fas fa-dollar-sign fa-2x"></i></button>
                 </div>
-                <div class="col-4">
-                    <button [disabled]="details.length==0" class="btn btn-primary" mdbTooltip="Pedido en mesa" (click)="openTableModal()"><i class="fas fa-chair fa-2x"></i></button>
+                <div class="col-3">
+                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-secondary" mdbTooltip="Notas" (click)="openNoteModal(details, 'print')"><i class="fas fa-file-signature fa-2x"></i></button>
                 </div>
-                <div class="col-4">
-                    <button [disabled]="details.length==0" class="btn btn-success" mdbTooltip="Confirmar venta" (click)="confirmSale()"><i class="fas fa-clipboard-check fa-2x"></i></button>
+                <div class="col-3">
+                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-primary" mdbTooltip="Pedido en mesa" (click)="openTableModal()"><i class="fas fa-chair fa-2x"></i></button>
+                </div>
+                <div class="col-3">
+                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-success" mdbTooltip="Confirmar venta" (click)="confirmSale()"><i class="fas fa-clipboard-check fa-2x"></i></button>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col-8">
                     <div class="md-form">
-                        <select class="form-control" [(ngModel)]="table" (ngModelChange)="pendingSale = false">
+                        <select   class="form-control" [(ngModel)]="table" (ngModelChange)="pendingSale = false">
                           <option value="" disabled selected>Mesas ocupadas</option>
                           <option  [ngValue]="ts" *ngFor=" let ts of tables">Mesa {{ts.id}}</option>
                         </select>

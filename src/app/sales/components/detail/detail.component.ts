@@ -7,10 +7,14 @@ import { ConfirmSaleModalComponent } from "../confirm-sale-modal/confirm-sale-mo
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { NoteModalComponent } from "../note-modal/note-modal.component";
 import { OrderTableModalComponent } from "../order-table-modal/order-table-modal.component";
+import { CashModalComponent } from "../cash-modal/cash-modal.component";
 import { TablesService } from '../../services/tables.service';
 import { TABLE } from 'src/app/shared/interfaces/sale.interface';
 import { ProductService } from '../../services/product.service';
-import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y/input-modality/input-modality-detector';
+import { CashService } from '../../services/cash.service';
+import { CASH } from '../../interfaces/cash.interface';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -25,18 +29,22 @@ doc:string = '';
 modalRef: MdbModalRef<ConfirmSaleModalComponent>;
 modalNoteRef: MdbModalRef<NoteModalComponent>;
 modalTableRef:MdbModalRef<OrderTableModalComponent>
+modalCashRef:MdbModalRef<CashModalComponent>
 tables:TABLE[];
 table:any = '';
 pendingSale:boolean=false;
 pendingDetail:any = []
 removedSubscribe;
-products = []
+products = [];
+cash:CASH;
   constructor(private saleS:SaleService,
     private as:AlertService,
     private literal:LiteralService,
     private modalService: MdbModalService,
     private ts:TablesService,
-    private ps:ProductService) { }
+    private ps:ProductService,
+    private cashS:CashService,
+    private router:Router) { }
 
   ngOnInit(): void {
     this.pendingSale=false;
@@ -48,7 +56,23 @@ products = []
       //console.log(this.total)
     })
     this.getTables()
+    this.getTodayCash()
     //this.getRemoves()
+    
+  }
+  getTodayCash(){
+    this.cashS.getTodayCash().then((res:any)=>{
+      this.cash = res;
+      if(res.status == 'OPEN'){
+        this.openCashModal()
+      }else if(res.status == 'CLOSED'){
+        this.as.mensajeAdvertencia().then(res=>{
+          this.router.navigate(['admin/product/'])
+        })
+      }
+
+     
+    })
   }
   getRemoves(){
     this.removedSubscribe = this.saleS.getRemoveds().subscribe( (res:any)=>{
@@ -66,6 +90,13 @@ products = []
     if(!this.pendingSale){
       this.saleS.deleteSale()
     }else{
+      this.table.saleData.status = "CANCELLED"
+      this.saleS.getNumberOfSales().then(n=>{
+        const s = {
+          [n+1]:this.table.saleData
+        }
+        this.saleS.confirmSale(s)
+     
       this.details.forEach(a=>{
         if(a.limited){
           a.stock = a.stock + a.cant
@@ -81,6 +112,7 @@ products = []
       this.table.free = true;
       this.updateTable()
       this.saleS.deleteSale()
+    })
     }
     //console.log(this.details)
   }
@@ -101,6 +133,7 @@ products = []
   }
   loadTableDetail(){
     
+    console.log(this.table.saleData)
     this.table.saleData.detail.forEach(async a=>{
       //console.log(a)
       let prod:any = await this.ps.getProduct(a.id)
@@ -216,6 +249,20 @@ products = []
       containerClass:'center',
       ignoreBackdropClick: true,
       data:{detail:data, type:type}
+    })
+  }
+  openCashModal(){
+    this.modalCashRef = this.modalService.open(CashModalComponent,{
+      modalClass:'modal-md',
+      containerClass:'center',
+      ignoreBackdropClick: true
+    })
+    this.modalCashRef.onClose.subscribe((res)=>{
+      if(res && res.status !== 'OPEN')
+      {
+        this.getTodayCash()
+      }
+      
     })
   }
   openTableModal(){

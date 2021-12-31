@@ -13,6 +13,8 @@ import { NoteModalComponent } from './components/note-modal/note-modal.component
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { OrderTableModalComponent } from './components/order-table-modal/order-table-modal.component';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { CashModalComponent } from './components/cash-modal/cash-modal.component';
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { ReportsComponent } from './pages/reports/reports.component';
     ConfirmSaleModalComponent,
     NoteModalComponent,
     OrderTableModalComponent,
-    ReportsComponent
+    ReportsComponent,
+    CashModalComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +35,8 @@ import { ReportsComponent } from './pages/reports/reports.component';
     FormsModule,
     MdbCollapseModule,
     MdbTooltipModule,
-    MdbFormsModule
+    MdbFormsModule,
+    MdbAccordionModule
   ]
 })
 export class SalesModule { }

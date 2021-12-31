@@ -1,7 +1,7 @@
 <div class="container">
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-xl-12">
-            <h6>Reporte de ventas</h6>
+            <h6>Reporte diario</h6>
         </div>
     </div>
     <div class="row">
@@ -13,7 +13,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-12">
+        <div class="col-6"><h6>Ventas:</h6></div>
+        <div class="col-6"><h6>Caja:</h6></div>
+        <div class="col-xl-6 t">
             <table class="table">
                 <thead>
                   <tr>
@@ -21,24 +23,42 @@
                     <th scope="col">Hora</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">NIT/CI</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let v of sales |keyvalue">
+                  <tr *ngFor="let v of sales |keyvalue" [ngClass]="{'rojo':v.value['status'] == 'CANCELLED','verde':v.value['status'] == 'PAY'}">
                     <th scope="row">{{v.key}}</th>
                     <td>{{v.value['hour']}}</td>
                     <td>{{v.value['client']}}</td>
                     <td>{{v.value['doc']}}</td>
+                    <td><span *ngIf="v.value['status'] == 'PAY'">PAGADO</span><span *ngIf="v.value['status'] == 'CANCELLED'">CANCELADO</span></td>
                     <td>{{v.value['cost']|currency:'Bs.'}}</td>
                   </tr>
-                    <tr class="table-warning">
-                        <td colspan="4"></td>
-                        <td>Total: {{total|currency:'Bs.'}}</td>
-                    </tr>  
+                    
                 </tbody>
                 
               </table>
+              
+        </div>
+        <div class="col-xl-6 cj">
+            <p>Estado de la caja: <span class="ms-1">{{cash.status}}</span></p>
+            <p>Apertura de caja:</p>
+            <p class="ms-5">Hora: <span class="ms-5">{{cash.opened.hour}}</span></p>
+            <p class="ms-5">Monto de apertura: <span class="float-end">(+) {{cash.opened.cash|currency:'Bs. '}}</span></p>
+            <p>Ingresos por ventas: <span class="float-end">(+) {{cash.salesIncome|currency:'Bs. '}}</span></p>
+            <p>Otros ingresos: <span class="float-end">(+) {{totalIncomes|currency:'Bs. '}}</span></p>
+            <p>Egresos: <span class="float-end text-danger">(-) {{totalExpenses|currency:'Bs. '}}</span></p>
+            <p>Cierre de caja:</p>
+            <p class="ms-5">Hora: <span class="ms-5">{{cash.closed.hour}}</span></p>
+            <p class="ms-5">Monto de cierre: <span class="float-end">{{cash.closed.cash|currency:'Bs. '}}</span></p>
+        </div>
+        <div class="col-xl-12 bg-warning ">
+            <h4 class="float-end">Monto en caja: {{cash.totalCash|currency:'Bs.'}} </h4>
+        </div>
+        <div class="col-xl-12">
+            
         </div>
     </div>
 </div>

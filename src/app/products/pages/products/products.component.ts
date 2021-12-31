@@ -4,6 +4,7 @@ import { PRODUCT } from 'src/app/shared/interfaces/product.interface';
 import { FormProductModalComponent } from "../../components/form-product-modal/form-product-modal.component";
 import { FlavorsModalComponent } from "src/app/products/components/flavors-modal/flavors-modal.component";
 import { ProductService } from '../../services/product.service';
+import { ConfigService } from 'src/app/shared/services/config.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -13,13 +14,21 @@ export class ProductsComponent implements OnInit {
   modalRef: MdbModalRef<FormProductModalComponent>;
   modalFlavorRef: MdbModalRef<FlavorsModalComponent>;
   products:PRODUCT[]
+  categories:any;
+  categorie:string = 'CAFETERIA';
   constructor(private modalService: MdbModalService,
-    private ps:ProductService) { }
+    private ps:ProductService,
+    private configS:ConfigService) { }
 
   ngOnInit(): void {
     this.getProd()
+    this.getConfig()
   }
-  
+  getConfig(){
+    this.configS.config('categories').then(res=>{
+      this.categories = res;
+    })
+  }
   openModal() {
     this.modalRef = this.modalService.open(FormProductModalComponent,{
       modalClass:'modal-lg',
@@ -44,7 +53,7 @@ export class ProductsComponent implements OnInit {
 
   getProd(){
     this.ps.getProducts().subscribe(res=>{
-      this.products = res;
+      this.products = res.filter(val=>val.category == this.categorie);
     })
   }
 

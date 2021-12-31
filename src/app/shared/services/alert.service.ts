@@ -19,4 +19,12 @@ export class AlertService {
       confirmButtonText: 'Confirmar'
     })
   }
+  mensajeAdvertencia()
+  {
+    return Swal.fire({
+      title:'CERRADO',
+      text: 'La caja se encuentra cerrada para el dia de hoy',
+      icon: 'warning'
+    })
+  }
 }
