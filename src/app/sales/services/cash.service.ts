@@ -35,8 +35,16 @@ export class CashService {
     })
   }
   addCash(data){
-    let date = formatDate(new Date(), 'YYYY-MM-dd', 'en')
-    let cashRef = this.fb.doc(`cash/${date}`);
+    //let date = formatDate(new Date(), 'YYYY-MM-dd', 'en')
+    let cashRef = this.fb.doc(`cash/${data.date}`);
+    localStorage.setItem('cash', JSON.stringify(data))
     return cashRef.set(data,{merge:true})
+  }
+  isCashOpen(){
+    const cash = JSON.parse(localStorage.getItem('cash'))
+    return (cash !== null) ? true : false;
+  }
+  getLocalCash(){
+    return JSON.parse(localStorage.getItem('cash'));
   }
 }

@@ -75,8 +75,8 @@ private tablesToday:AngularFirestoreDocument<any>
       })
     })
   }
-  confirmSale(data){
-    let date = formatDate(new Date(), 'YYYY-MM-dd', 'en')
+  confirmSale(data, date){
+    //let date = formatDate(new Date(), 'YYYY-MM-dd', 'en')
     
     return this.saleCollection.doc(date).set(data, {merge:true})
   }
@@ -97,7 +97,8 @@ private tablesToday:AngularFirestoreDocument<any>
         price:p.price,
         cost: p.price,
         stock:p.stock,
-        limited:(p.limited)?true:false
+        limited:(p.limited)?true:false,
+        area:p.area
        });
     }else{
       this.detail.find(item => {
@@ -143,7 +144,7 @@ private tablesToday:AngularFirestoreDocument<any>
     this.detail$.next(this.detail)
   }
   loadSale(data){
-    console.log(data)
+   
     this.detail = data;
     this.detail$.next(this.detail);
   }
@@ -155,9 +156,9 @@ private tablesToday:AngularFirestoreDocument<any>
   cancelSale():Observable<boolean>{
     return this.cancel$.asObservable()
   }
-  async getNumberOfSales(){
+  async getNumberOfSales(date){
     let num = 0
-    let sales = await this.getTodaySales();
+    let sales = await this.getSales(date);
     if(sales){
       num = Object.keys(sales).length
     }

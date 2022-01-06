@@ -40,7 +40,7 @@ pres:any
     })
     this.cs.config('types').then(res=>{
       this.types = res;
-      console.log(this.types)
+      
     })
   }
   getType(){
@@ -65,7 +65,8 @@ pres:any
       presentation: ['', Validators.required],
       price:['', Validators.required],
       stock:['', Validators.required],
-      limited:false
+      limited:false,
+      area:['', Validators.required]
     })
   }
   editForm(){
@@ -171,6 +172,7 @@ pres:any
     if(this.typeForm == 'create'){
       this.ps.addProduct(this.productForm.value).then(a=>{
         this.productForm.reset();
+        this.modalRef.close();
         //console.log('guardado')
       });
     }else if(this.typeForm == 'update'){

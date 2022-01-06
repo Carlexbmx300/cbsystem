@@ -21,7 +21,8 @@ export class FlavorsComponent implements OnInit {
       name: this.product.name+' '+f.name,
       presentation: this.product.presentation,
       price:f.price,
-      stock:this.product.stock
+      stock:this.product.stock,
+      area:this.product.area
     }
     this.saleS.addDetail(p)
   }

@@ -30,6 +30,9 @@ export class ProductService {
   updateProduct(doc, data){
     return this.productCollection.doc(doc).set(data, {merge:true});
   }
+  deleteProduct(id){
+    return this.productCollection.doc(id).delete();
+  }
   getProduct(doc:string){
     return new Promise((resolve, reject) => {
       let prod = this.productCollection.doc(doc)

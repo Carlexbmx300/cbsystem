@@ -3,6 +3,8 @@
     height: 80px;
     width: 80px;
     padding: 10px 10px 8px;
+    background-color: lightgrey;
+    font-weight: 500;
     p{
         margin: 0;
     }
@@ -15,4 +17,40 @@
    
     height: 550px;
     overflow-y: auto;
+}
+.CAFETERIA{
+    background-color: #D7CCC8 !important;
+}
+.LICUADOS{
+    background-color: #B3E5FC;
+}
+.GASEOSAS{
+    background-color: #D1C4E9;
+}
+.CERVEZAS{
+    background-color: #F0F4C3;
+}
+.TRAGOS{
+    background-color: #FFE0B2;
+}
+.PASTA{
+    background-color: #FFCCBC;
+}
+.PIZZA{
+    background-color: #FFCCBC;
+}
+.CALIENTES{
+    background-color: #FFCC80;
+}
+.JARRAS{
+    background-color: #C8E6C9;
+}
+.ENSALADAS{
+    background-color: #C5E1A5;
+}
+.PICADOS{
+    background-color: #FFE57F;
+}
+.HELADOS{
+    background-color: #E1F5FE;
 }

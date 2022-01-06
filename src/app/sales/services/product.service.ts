@@ -28,18 +28,17 @@ export class ProductService {
   addProduct(data){
     return this.productCollection.add(data);
   }
+  
   updateProduct(doc, data){
     return this.productCollection.doc(doc).set(data, {merge:true});
   }
   updateStock(data){
-    console.log(data['detail'])
     if(data['detail']){
       data['detail'].forEach(a=>{
         if(a.limited){
           const data = {
             stock:a.stock        }
           this.updateProduct(a.id, data)
-          console.log(a)
         }
       })
     }

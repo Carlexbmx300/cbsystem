@@ -9,6 +9,7 @@ export interface DETAIL{
     hour:string;
     status:string;
     type:string;
+    billDate:string;
 
 }
 export interface SALE{

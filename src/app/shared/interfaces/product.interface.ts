@@ -8,6 +8,7 @@ export interface PRODUCT{
     limited:boolean;
     price:number;
     flavors?:[FLAVOR]
+    area:string
 }
 export interface FLAVOR{
     name:string;

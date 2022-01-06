@@ -16,7 +16,7 @@ const routes: Routes = [
         path:'sale', loadChildren: ()=> import('../sales/sales.module').then(m=>m.SalesModule)
       },
       {
-        path:'**', redirectTo:'product'
+        path:'**', redirectTo:'sale'
       }
     ]
     

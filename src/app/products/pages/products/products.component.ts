@@ -5,6 +5,7 @@ import { FormProductModalComponent } from "../../components/form-product-modal/f
 import { FlavorsModalComponent } from "src/app/products/components/flavors-modal/flavors-modal.component";
 import { ProductService } from '../../services/product.service';
 import { ConfigService } from 'src/app/shared/services/config.service';
+import { AlertService } from 'src/app/shared/services/alert.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -16,11 +17,16 @@ export class ProductsComponent implements OnInit {
   products:PRODUCT[]
   categories:any;
   categorie:string = 'CAFETERIA';
+  pass:string = '';
+  show:boolean = false;
   constructor(private modalService: MdbModalService,
     private ps:ProductService,
-    private configS:ConfigService) { }
+    private configS:ConfigService,
+    private as:AlertService) { }
 
   ngOnInit(): void {
+    this.show = false
+    this.pass = '';
     this.getProd()
     this.getConfig()
   }
@@ -28,6 +34,14 @@ export class ProductsComponent implements OnInit {
     this.configS.config('categories').then(res=>{
       this.categories = res;
     })
+  }
+  access(){
+    if(this.pass == 'admincasablanca2022'){
+      this.show = true;
+    }else{
+      this.as.mensajeAdvertencia2('ERROR!!!','Clave de acceso incorrecta')
+      this.show = false
+    }
   }
   openModal() {
     this.modalRef = this.modalService.open(FormProductModalComponent,{
@@ -54,6 +68,13 @@ export class ProductsComponent implements OnInit {
   getProd(){
     this.ps.getProducts().subscribe(res=>{
       this.products = res.filter(val=>val.category == this.categorie);
+    })
+  }
+  deleteProd(id){
+    this.as.confirmDeleteAlert().then(res=>{
+      if(res.isConfirmed){
+        this.ps.deleteProduct(id);
+      }
     })
   }
 

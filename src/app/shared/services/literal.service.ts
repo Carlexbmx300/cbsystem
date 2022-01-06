@@ -147,7 +147,7 @@ numeroALetras(num, currency) {
         letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS CHILENOS',
         letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO CHILENO'
     };
-    console.log(data.centavos)
+    
     if (data.centavos > 0) {
         let centavos = ''
         if (data.centavos == 1)

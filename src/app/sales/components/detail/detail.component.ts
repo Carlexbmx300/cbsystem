@@ -25,7 +25,7 @@ details = []
 total:number = 0;
 detailSubscribe;
 client:string = '';
-doc:string = '';
+doc:string = '0';
 modalRef: MdbModalRef<ConfirmSaleModalComponent>;
 modalNoteRef: MdbModalRef<NoteModalComponent>;
 modalTableRef:MdbModalRef<OrderTableModalComponent>
@@ -62,17 +62,32 @@ cash:CASH;
   }
   getTodayCash(){
     this.cashS.getTodayCash().then((res:any)=>{
-      this.cash = res;
+      /*this.cash = res;
+      console.log(res)
       if(res.status == 'OPEN'){
         this.openCashModal()
       }else if(res.status == 'CLOSED'){
         this.as.mensajeAdvertencia().then(res=>{
           this.router.navigate(['admin/product/'])
         })
+      }*/
+      if(res.status == 'OPENED' && !this.cashS.isCashOpen()){
+        console.log(res)
       }
 
      
     })
+    if(this.cashS.isCashOpen()){
+      this.cash = this.cashS.getLocalCash();
+      if(this.cash.status == 'CLOSED'){
+        /*this.as.mensajeAdvertencia().then(res=>{
+         // this.router.navigate(['admin/product/'])
+        })*/
+        this.openCashModal()
+      }
+    }else{
+      this.openCashModal()
+    }
   }
   getRemoves(){
     this.removedSubscribe = this.saleS.getRemoveds().subscribe( (res:any)=>{
@@ -90,29 +105,34 @@ cash:CASH;
     if(!this.pendingSale){
       this.saleS.deleteSale()
     }else{
-      this.table.saleData.status = "CANCELLED"
-      this.saleS.getNumberOfSales().then(n=>{
-        const s = {
-          [n+1]:this.table.saleData
+      this.as.confirmDeleteAlert().then(res=>{
+        if(res.isConfirmed){
+                this.table.saleData.status = "CANCELLED"
+            //this.saleS.getNumberOfSales(this.cash.date).then(n=>{
+              const s = {
+                [this.table.saleData.ticketNumber]:this.table.saleData
+              }
+              this.saleS.confirmSale(s, this.cash.date)
+          
+            this.details.forEach(a=>{
+              if(a.limited){
+                a.stock = a.stock + a.cant
+                const data = {
+                  stock:a.stock
+                }
+                this.ps.updateProduct(a.id, data)
+                console.log(a.stock)
+              }
+              
+            })
+            this.table.saleData = ''
+            this.table.free = true;
+            this.updateTable()
+            this.saleS.deleteSale()
+        // })
         }
-        this.saleS.confirmSale(s)
-     
-      this.details.forEach(a=>{
-        if(a.limited){
-          a.stock = a.stock + a.cant
-          const data = {
-            stock:a.stock
-          }
-          this.ps.updateProduct(a.id, data)
-          console.log(a.stock)
-        }
-        
       })
-      this.table.saleData = ''
-      this.table.free = true;
-      this.updateTable()
-      this.saleS.deleteSale()
-    })
+      
     }
     //console.log(this.details)
   }
@@ -127,13 +147,22 @@ cash:CASH;
   }
   getTables(){
     this.ts.getTables().subscribe(res=>{
+      res.sort((a, b) => {
+        if(parseInt(a.id) > parseInt(b.id)) {
+          return 1;
+        } else if(parseInt(a.id) < parseInt(b.id)) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
       this.tables = res.filter(val=>!val.free)
       //console.log(this.tables)
     })
   }
   loadTableDetail(){
     
-    console.log(this.table.saleData)
+   
     this.table.saleData.detail.forEach(async a=>{
       //console.log(a)
       let prod:any = await this.ps.getProduct(a.id)
@@ -147,7 +176,7 @@ cash:CASH;
     this.client = this.table.saleData.client
     this.doc = this.table.saleData.doc
     this.pendingSale = true;
-    console.log(this.details)
+   
   }
   saveRemovedDetails(){
     this.pendingDetail.forEach((a, index)=>{
@@ -169,7 +198,7 @@ cash:CASH;
       this.table = ''
       this.pendingDetail = []
       this.client = ''
-      this.doc = ''
+      this.doc = '0'
       this.saleS.newSale()
       this.removedSubscribe.unsubscribe();
     })
@@ -182,7 +211,8 @@ cash:CASH;
     this.saveRemovedDetails();
     //console.log(this.pendingDetail)
     this.updateTable();
-    console.log(this.table)
+    this.as.mensajeCorrecto('Mesa guardada','Se agrego registro de mesa correctamente')
+   
   }
   saleData(){
     let lit = this.literal.numeroALetras(this.total, {
@@ -192,12 +222,14 @@ cash:CASH;
       centSingular: 'centavo'
     })
     const data = {
-      client:this.client,
+      client:(this.doc == '0')?'SIN NOMBRE':this.client,
       doc:this.doc,
       detail:this.details,
       cost:this.total,
       costLiteral:lit,
-      date:formatDate(new Date(), 'YYYY-MM-dd', 'en'),
+      date:this.cash.date,
+      ticketNumber:(this.pendingSale)?this.table.saleData.ticketNumber:this.cashS.getLocalCash().ticketNumber,
+      billDate:formatDate(new Date(), 'YYYY-MM-dd', 'en'),
       hour:formatDate(new Date(), 'HH:mm', 'en'),
       status:(this.pendingSale)?'PENDING':'PAY'
     }
@@ -248,7 +280,7 @@ cash:CASH;
       modalClass:'modal-md',
       containerClass:'center',
       ignoreBackdropClick: true,
-      data:{detail:data, type:type}
+      data:{detail:data, type:type, sale:this.saleData(), saleType:(this.pendingSale)?this.table.id:'Para llevar'}
     })
   }
   openCashModal(){

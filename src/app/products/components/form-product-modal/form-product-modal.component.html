@@ -15,8 +15,8 @@
             <div class="row">
               <div class="col-xl-3">
                 <mdb-form-control>
-                  <input mdbInput type="text" id="typeText" class="form-control mb-4" formControlName="name" />
-                  <label mdbLabel class="form-label" for="typeText">Nombre</label>
+                  <input mdbInput type="text" id="name" class="form-control mb-4" formControlName="name" />
+                  <label mdbLabel class="form-label" for="name">Nombre</label>
                 </mdb-form-control> 
               </div>
               <div class="col-xl-3">
@@ -62,6 +62,14 @@
                   <input mdbInput  type="number" id="stock" class="form-control" formControlName="stock" />
                   <label mdbLabel class="form-label" for="stock">Unidades</label>
                 </mdb-form-control>
+              </div>
+              <div class="col-xl-3">
+                <div class="md-form">
+                  <select class="form-control" formControlName="area">
+                    <option value="" disabled>Area</option>
+                    <option value={{ar}} *ngFor=" let ar of categories.areaList">{{ar}}</option>
+                  </select>
+                </div>
               </div>
             </div>
            <!-- <div class="row">

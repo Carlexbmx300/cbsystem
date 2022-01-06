@@ -1,10 +1,23 @@
-<div class="container">
+<div class="container" *ngIf="!show">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="input-group mt-3">
+        <input [(ngModel)]="pass" type="password" class="form-control" placeholder="Clave de acceso" aria-label="Clave de acceso"
+          aria-describedby="button-addon2" />
+        <button [disabled]="pass.length < 10" (click)="access()" class="btn btn-success" type="button" id="button-addon2" mdbRipple rippleColor="danger" >
+          ingresar
+        </button>
+      </div> 
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="show">
     <div class="row mt-3">
         <div class="col-xl-12">
             <h6>Reporte diario</h6>
         </div>
     </div>
-    <div class="row">
+    <div class="row" >
         <div class="col-4">
             <div class="input-group mb-2">
                 <span class="input-group-text border-0" id="basic-addon3" >Fecha: </span>
@@ -12,11 +25,50 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-6"><h6>Ventas:</h6></div>
+    <div class="row" *ngIf="cash">
+        <div class="col-6"><h6>Ventas:</h6>
+            <div class="form-check form-check-inline">
+                <input
+                  mdbRadio
+                  class="form-check-input"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="inlineRadio1"
+                  value="sales"
+                  [checked]="true"
+                  (change)="changeTable($event)"
+                />
+                <label class="form-check-label" for="inlineRadio1">Ventas</label>
+              </div>
+              
+              <div class="form-check form-check-inline">
+                <input
+                  mdbRadio
+                  class="form-check-input"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="inlineRadio2"
+                  value="incomes"
+                  (change)="changeTable($event)"
+                />
+                <label class="form-check-label" for="inlineRadio2">Otros Ingresos</label>
+              </div>
+              
+              <div class="form-check form-check-inline">
+                <input
+                  mdbRadio
+                  class="form-check-input"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="inlineRadio3"
+                  value="expenses"
+                  (change)="changeTable($event)"
+                />
+                <label class="form-check-label" for="inlineRadio3">Egresos</label>
+              </div></div>
         <div class="col-6"><h6>Caja:</h6></div>
-        <div class="col-xl-6 t">
-            <table class="table">
+        <div class="col-xl-6 t" *ngIf="table == 'sales'">
+            <table class="table table-fixed table-sm">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -25,34 +77,101 @@
                     <th scope="col">NIT/CI</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Total</th>
+                    <th scope="col">Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let v of sales |keyvalue" [ngClass]="{'rojo':v.value['status'] == 'CANCELLED','verde':v.value['status'] == 'PAY'}">
+                <ng-container *ngFor="let v of sales |keyvalue:reverseKeyOrder ">
+                  <tr  [ngClass]="{'rojo':v.value['status'] == 'CANCELLED','verde':v.value['status'] == 'PAY'}">
                     <th scope="row">{{v.key}}</th>
                     <td>{{v.value['hour']}}</td>
                     <td>{{v.value['client']}}</td>
                     <td>{{v.value['doc']}}</td>
                     <td><span *ngIf="v.value['status'] == 'PAY'">PAGADO</span><span *ngIf="v.value['status'] == 'CANCELLED'">CANCELADO</span></td>
                     <td>{{v.value['cost']|currency:'Bs.'}}</td>
+                    <td><button mdbRipple type="button" class="btn btn-primary btn-lg btn-floating" (click)="showDetail(v.key)">
+                        <i class="fas fa-angle-down"></i>
+                      </button></td>
                   </tr>
-                    
+                  <tr *ngIf="detailIndex == v.key"><td colspan="6">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let d of v.value['detail']; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{d.name}}</td>
+                                <td>{{d.cant}}</td>
+                                <td>{{d.price | currency:'Bs. '}}</td>
+                                <td>{{d.cost | currency:'Bs. '}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td></tr>
+                 </ng-container>   
                 </tbody>
                 
               </table>
               
         </div>
-        <div class="col-xl-6 cj">
-            <p>Estado de la caja: <span class="ms-1">{{cash.status}}</span></p>
+        <div class="col-xl-6 t" *ngIf="table == 'incomes'">
+            <table class="table table-fixed table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Glosa</th>
+                    <th scope="col">Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ic of cash.income;let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{ic.hour}}</td>
+                        <td>{{ic.gloss}}</td>
+                        <td>{{ic.cash |currency:'Bs. '}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xl-6 t" *ngIf="table == 'expenses'">
+            <table class="table table-fixed table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Glosa</th>
+                    <th scope="col">Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ic of cash.expense;let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{ic.hour}}</td>
+                        <td>{{ic.gloss}}</td>
+                        <td>{{ic.cash |currency:'Bs. '}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xl-6 cj" >
+            <p>Estado de la caja: <span class="ms-1" *ngIf="cash.status == 'CLOSED'">CERRADO</span><span class="ms-1" *ngIf="cash.status == 'OPENED'">ABIERTO</span></p>
             <p>Apertura de caja:</p>
             <p class="ms-5">Hora: <span class="ms-5">{{cash.opened.hour}}</span></p>
             <p class="ms-5">Monto de apertura: <span class="float-end">(+) {{cash.opened.cash|currency:'Bs. '}}</span></p>
             <p>Ingresos por ventas: <span class="float-end">(+) {{cash.salesIncome|currency:'Bs. '}}</span></p>
             <p>Otros ingresos: <span class="float-end">(+) {{totalIncomes|currency:'Bs. '}}</span></p>
             <p>Egresos: <span class="float-end text-danger">(-) {{totalExpenses|currency:'Bs. '}}</span></p>
-            <p>Cierre de caja:</p>
-            <p class="ms-5">Hora: <span class="ms-5">{{cash.closed.hour}}</span></p>
-            <p class="ms-5">Monto de cierre: <span class="float-end">{{cash.closed.cash|currency:'Bs. '}}</span></p>
+            <p *ngIf="cash.closed">Cierre de caja:</p>
+            <p *ngIf="cash.closed" class="ms-5">Hora: <span class="ms-5">{{cash.closed.hour}}</span></p>
+            <p *ngIf="cash.closed" class="ms-5">Monto de cierre: <span class="float-end">{{cash.closed.cash|currency:'Bs. '}}</span></p>
         </div>
         <div class="col-xl-12 bg-warning ">
             <h4 class="float-end">Monto en caja: {{cash.totalCash|currency:'Bs.'}} </h4>
@@ -60,5 +179,8 @@
         <div class="col-xl-12">
             
         </div>
+    </div>
+    <div class="row" *ngIf="!cash">
+        <h4>No existe datos registrados para este dia</h4>
     </div>
 </div>

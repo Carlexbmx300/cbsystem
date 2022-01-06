@@ -50,7 +50,6 @@ cancelSubscribe;
       this.getProducts()
     })
     this.stockSubscribe=this.saleS.getStock().subscribe(res=>{
-        console.log(res.stock)
       this.productList.find(item=>{
         if(item.id == res.id && item.limited == true){
           //console.log(item)

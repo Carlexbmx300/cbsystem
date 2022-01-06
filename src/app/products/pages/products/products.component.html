@@ -1,4 +1,17 @@
-<div class="container">
+<div class="container" *ngIf="!show">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="input-group mt-3">
+        <input [(ngModel)]="pass" type="password" class="form-control" placeholder="Clave de acceso" aria-label="Clave de acceso"
+          aria-describedby="button-addon2" />
+        <button [disabled]="pass.length < 10" (click)="access()" class="btn btn-success" type="button" id="button-addon2" mdbRipple rippleColor="danger" >
+          ingresar
+        </button>
+      </div> 
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="show">
     <div class="row">
         <div class="col-xl-6">
             <h4>Lista de productos</h4>
@@ -29,6 +42,7 @@
                     <th scope="col">Presentacion</th>
                     <th scope="col">Precio Bs.</th>
                     <th scope="col">Categoria</th>
+                    <th scope="col">Area</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Operaciones</th>
                   </tr>
@@ -43,6 +57,7 @@
                       <span *ngIf="pr.type == 'Sabores'">Por sabor</span>
                     </td>
                     <td>{{pr.category}}</td>
+                    <td>{{pr.area}}</td>
                     <td>
                       <span *ngIf="pr.limited">{{pr.stock}}</span>
                       <span *ngIf="!pr.limited">Abierto</span>
@@ -51,7 +66,7 @@
                       <div class="btn-group" role="group" aria-label="Basic example">
                         <button *ngIf="pr.type == 'Sabores'" type="button" class="btn btn-info" (click)="openFlavorsModal(pr)">Sabores</button>
                         <button type="button" class="btn btn-warning" (click)="openUpdateModal(pr.id)">Modificar</button>
-                        <button type="button" class="btn btn-danger">ELiminar</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteProd(pr.id)">ELiminar</button>
                       </div>
                     </td>
                   </tr>

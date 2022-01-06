@@ -6,6 +6,8 @@ export interface CASH{
     income:[IncomeExpense];
     expense:[IncomeExpense];
     salesIncome:number;
+    date:string;
+    ticketNumber:number;
 }
 export interface OpenClose{
     hour:string;

@@ -55,6 +55,8 @@ flavorForm:FormGroup;
     })
   }
   saveFlavors(){
-    this.ps.updateProduct(this.product.id, this.flavorForm.value)
+    this.ps.updateProduct(this.product.id, this.flavorForm.value).then(()=>{
+      this.modalRef.close()
+    })
   }
 }

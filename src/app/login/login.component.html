@@ -1,19 +1,19 @@
 <div class="container">
     <div class="row log">
         <div class="col-xl-6 offset-xl-3">
-            <form class="text-center p-5 shadow-4-strong">
+            <div class="text-center p-5 shadow-4-strong">
                 
                         <mdb-form-control>
-                            <input mdbInput type="text" id="typeText" class="form-control mb-4" />
-                            <label mdbLabel class="form-label" for="typeText">Usuario</label>
+                            <input mdbInput type="text" id="user" class="form-control mb-4" [(ngModel)]="user" />
+                            <label mdbLabel class="form-label" for="user">Usuario</label>
                         </mdb-form-control>
                         <mdb-form-control>
-                            <input mdbInput type="text" id="typeText2" class="form-control mb-4" />
-                            <label mdbLabel class="form-label" for="typeText">Contraseña</label>
+                            <input mdbInput type="password" id="pass" class="form-control mb-4" [(ngModel)]="password" />
+                            <label mdbLabel class="form-label" for="pass">Contraseña</label>
                         </mdb-form-control>
                         <button  class="btn btn-success" type="button" (click)="login()">Iniciar sesion</button>
                    
-            </form>
+                    </div>
         </div>
     </div>
 </div>

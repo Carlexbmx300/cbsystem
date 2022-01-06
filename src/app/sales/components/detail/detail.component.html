@@ -58,13 +58,13 @@
                     <button class="btn btn-dark" mdbTooltip="Caja" (click)="openCashModal()"><i class="fas fa-dollar-sign fa-2x"></i></button>
                 </div>
                 <div class="col-3">
-                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-secondary" mdbTooltip="Notas" (click)="openNoteModal(details, 'print')"><i class="fas fa-file-signature fa-2x"></i></button>
+                    <button [disabled]="details.length==0 || cash.status == 'CLOSED'" class="btn btn-secondary" mdbTooltip="Notas" (click)="openNoteModal(details, 'print')"><i class="fas fa-file-signature fa-2x"></i></button>
                 </div>
                 <div class="col-3">
-                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-primary" mdbTooltip="Pedido en mesa" (click)="openTableModal()"><i class="fas fa-chair fa-2x"></i></button>
+                    <button [disabled]="details.length==0 || cash.status == 'CLOSED'" class="btn btn-primary" mdbTooltip="Pedido en mesa" (click)="openTableModal()"><i class="fas fa-chair fa-2x"></i></button>
                 </div>
                 <div class="col-3">
-                    <button [disabled]="details.length==0 || cash.status == 'OPEN'" class="btn btn-success" mdbTooltip="Confirmar venta" (click)="confirmSale()"><i class="fas fa-clipboard-check fa-2x"></i></button>
+                    <button [disabled]="details.length==0 || cash.status == 'CLOSED'" class="btn btn-success" mdbTooltip="Confirmar venta" (click)="confirmSale()"><i class="fas fa-clipboard-check fa-2x"></i></button>
                 </div>
             </div>
             <div class="row mt-2">
